@@ -214,3 +214,5 @@ default_floating_border pixel 0
 # clipboard tool
 exec --no-startup-id greenclip daemon > /dev/null
 bindsym $mod+c exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard
+
+exec --no-startup-id /usr/bin/dunst
