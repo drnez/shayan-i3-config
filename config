@@ -29,7 +29,8 @@ exec --no-startup-id dex --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+set $lock "betterlockscreen -l dimblur"
+exec --no-startup-id xss-lock --transfer-sleep-lock -- $lock --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -157,8 +158,8 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Escape exec ~/.logout_file.sh
-bindsym $mod+Shift+e exec ~/.logout_file.sh
+bindsym $mod+Escape exec ~/scripts/logout_file.sh
+bindsym $mod+Shift+e exec ~/scripts/logout_file.sh
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -193,19 +194,16 @@ bindsym $mod+r mode "resize"
         # status_command i3status
 # }
 
-gaps inner 9
+gaps inner 6
 exec_always picom
-exec_always "setxkbmap -layout gb"
+exec_always "setxkbmap -layout gb &"
 exec_always setxkbmap -option compose:ralt
 
 bindsym $mod+f exec firefox
 bindsym $mod+Shift+w exec rofi -show window
 bindsym $alt+Tab exec rofi -show window
 
-bindsym $mod+Shift+s exec /home/shayan/Documents/Programming/bash-scripts/take-screenshot/takess.sh
-bindsym $mod+t exec /home/shayan/Documents/Programming/bash-scripts/kitty-timer/timer.sh
-bindsym $mod+Shift+t exec killall timer.sh
-
+bindsym $mod+Shift+s exec /home/shayan/scripts/rofi-screenshot-utility/takess.sh
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 default_border pixel 0
@@ -214,5 +212,14 @@ default_floating_border pixel 0
 # clipboard tool
 exec --no-startup-id greenclip daemon > /dev/null
 bindsym $mod+c exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard
-
+exec rm -r Desktop/ Documents/ Downloads/ Music/ Videos/ Pictures/ Public/ Templates/
 exec --no-startup-id /usr/bin/dunst
+
+exec xinput set-prop "SYNA801A:00 06CB:CEC6 Touchpad" "libinput Tapping Enabled" 1
+exec_always setxkbmap -option altwin:prtsc_rwin
+exec --no-startup-id xfsettingsd
+
+for_window [window_role="(?i)GtkFileChooserDialog"] resize set 1920 1080
+
+exec --no-startup-id /home/shayan/installs/i3unityfix.py &
+exec_always --no-startup-id feh --bg-fill /usr/share/wallpapers/pexels-souvenirpixels-417074.jpg
